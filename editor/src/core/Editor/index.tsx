@@ -17,7 +17,7 @@ const Editor = () => {
   const { editor, pluginManager } = useEditor();
 
   const plugins = useMemo(() => {
-    return pluginManager?.getAll() || [];
+    return pluginManager.getAll() || [];
   }, [pluginManager]);
 
   /**
@@ -61,6 +61,7 @@ const Editor = () => {
     (event: React.KeyboardEvent<HTMLDivElement>) => {
       for (const plugin of plugins) {
         if (plugin.onKeyDown && plugin.onKeyDown(event, editor)) {
+          event.preventDefault();
           return true;
         }
       }
@@ -76,8 +77,10 @@ const Editor = () => {
         renderElement={renderElement}
         renderLeaf={renderLeaf}
         onKeyDown={onKeyDown}
+        placeholder="输入 / 选择格式以使用 Markdown 快捷方式..."
       />
     </Slate>
   );
 };
+
 export default Editor;

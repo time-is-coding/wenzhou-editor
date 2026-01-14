@@ -3,7 +3,7 @@ import type { Editor } from "slate";
 /**
  * Slate插件接口定义
  */
-export interface SlatePlugin<T = unknown> {
+export interface SlatePlugin<T = any> {
   key: string; // 插件唯一标识
   priority?: number; // 优先级，用于排序
   command?: (editor: Editor, data?: T) => void; // 插件命令

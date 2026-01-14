@@ -8,3 +8,5 @@ export const UL_LIST = "ul"; // 无序列表类型
 export const OL_LIST = "ol"; // 有序列表类型
 export const LIST_ITEM = "li"; // 列表项类型
 export const CODE_BLOCK = "code-block"; // 代码块类型
+export const TODO_LIST = "todo-item"; // 待办事项类型
+export const BLOCK_QUOTE = "block-quote"; // 引用类型

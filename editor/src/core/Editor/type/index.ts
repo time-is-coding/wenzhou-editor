@@ -1,44 +1,70 @@
-import type { Descendant, Editor } from "slate";
+import type { BaseEditor } from "slate";
+import type { ReactEditor } from "slate-react";
+import type { HistoryEditor } from "slate-history";
 
-/**
- * 段落元素类型
- */
-export type ParagraphElement = { type: string; children: Descendant[] };
-
-/**
- * 标题元素类型
- */
-export type HeadingElement = { type: string; level: number; children: Descendant[] };
-
-/**
- * 列表元素类型
- */
-export type ListElement = { type: string; children: Descendant[] };
-
-/**
- * 代码块元素类型
- */
-export type CodeBlockElement = { type: string; language?: string; children: Descendant[] };
-
-/**
- * 自定义元素类型联合
- */
-export type CustomElement = ParagraphElement | HeadingElement | ListElement | CodeBlockElement;
-
-/**
- * 自定义文本类型，支持各种文本格式
- */
 export type CustomText = {
   text: string;
   bold?: boolean;
   italic?: boolean;
+  underline?: boolean;
+  strikethrough?: boolean;
   code?: boolean;
   [key: string]: any;
 };
 
-/**
- * 命令函数类型
- */
-export type CommandFn = (editor: Editor, data?: Record<string, any>) => void;
+export type BaseCustomElement = {
+  type: string;
+  children: Array<CustomElement | CustomText>;
+  [key: string]: any;
+};
 
-// 类型定义已在plugin/base.ts中定义
+export type ParagraphElement = BaseCustomElement & {
+  type: 'paragraph';
+};
+
+export type HeadingElement = BaseCustomElement & {
+  type: 'heading';
+  level: number;
+};
+
+export type ListElement = BaseCustomElement & {
+  type: 'ul' | 'ol';
+};
+
+export type ListItemElement = BaseCustomElement & {
+  type: 'li';
+  checked?: boolean;
+};
+
+export type CodeBlockElement = BaseCustomElement & {
+  type: 'code-block';
+  language?: string;
+};
+
+export type BlockQuoteElement = BaseCustomElement & {
+  type: 'block-quote';
+};
+
+export type TodoItemElement = BaseCustomElement & {
+  type: 'todo-item';
+  checked?: boolean;
+};
+
+export type CustomElement = 
+  | ParagraphElement 
+  | HeadingElement 
+  | ListElement 
+  | ListItemElement
+  | CodeBlockElement
+  | BlockQuoteElement
+  | TodoItemElement;
+
+export type CustomEditor = BaseEditor & ReactEditor & HistoryEditor;
+
+declare module 'slate' {
+  interface CustomTypes {
+    Editor: CustomEditor;
+    Element: CustomElement;
+    Text: CustomText;
+  }
+}

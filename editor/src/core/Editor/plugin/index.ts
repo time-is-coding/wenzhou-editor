@@ -4,6 +4,8 @@ import { headingPlugin } from "./heading";
 import { listPlugin } from "./list";
 import { codePlugin } from "./code";
 import { formatPlugin } from "./format";
+import { blockQuotePlugin } from "./blockQuote";
+import { todoListPlugin } from "./todoList";
 
 // 导出插件管理相关API
 export {
@@ -13,4 +15,6 @@ export {
   listPlugin,
   codePlugin,
   formatPlugin,
+  blockQuotePlugin,
+  todoListPlugin,
 };

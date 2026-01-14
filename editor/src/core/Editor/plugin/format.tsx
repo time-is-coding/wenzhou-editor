@@ -1,42 +1,47 @@
 import type { SlatePlugin } from "./base";
-import { Transforms } from "slate";
+import { Transforms, Editor, Element, Text } from "slate";
+
+interface FormatPluginData {
+  bold?: boolean;
+  italic?: boolean;
+  underline?: boolean;
+  strikethrough?: boolean;
+}
 
 /**
  * 文本格式渲染组件
- * 注意：此组件可以正确处理多种格式属性同时存在的情况
+ * 正确处理多种格式属性同时存在的情况
  */
 const FormatLeaf = ({ attributes, children, leaf }: any) => {
-  // 创建一个函数来递归应用所有格式属性
-  const applyFormats = (
-    content: React.ReactNode,
-    currentLeaf: any
-  ): React.ReactNode => {
-    // 应用粗体格式
-    if (currentLeaf.bold) {
-      content = <strong>{content}</strong>;
-    }
+  // 从叶子节点提取格式属性
+  const { bold, italic, underline, strikethrough, code, ...rest } = leaf;
 
-    // 应用斜体格式
-    if (currentLeaf.italic) {
-      content = <em>{content}</em>;
-    }
+  // 按照嵌套顺序应用格式
+  let content = <span {...attributes}>{children}</span>;
 
-    // 这里可以继续添加其他格式处理
-    // 例如：下划线、删除线等
+  if (bold) {
+    content = <strong>{content}</strong>;
+  }
+  if (italic) {
+    content = <em>{content}</em>;
+  }
+  if (underline) {
+    content = <u>{content}</u>;
+  }
+  if (strikethrough) {
+    content = <s>{content}</s>;
+  }
+  if (code) {
+    content = <code {...rest}>{content}</code>;
+  }
 
-    return content;
-  };
-
-  // 应用所有格式并返回最终结果
-  const formattedChildren = applyFormats(children, leaf);
-
-  return <span {...attributes}>{formattedChildren}</span>;
+  return content;
 };
 
 /**
  * 文本格式插件，处理文本格式的渲染、命令和快捷键
  */
-export const formatPlugin: SlatePlugin = {
+export const formatPlugin: SlatePlugin<FormatPluginData> = {
   key: "format",
   priority: 50,
   renderLeaf: (props) => {
@@ -47,7 +52,7 @@ export const formatPlugin: SlatePlugin = {
       Transforms.setNodes(
         editor,
         { bold: data.bold },
-        { match: (n) => !editor.isInline(n) && !editor.isVoid(n), split: true }
+        { match: (n) => Text.isText(n), split: true }
       );
     }
 
@@ -55,41 +60,83 @@ export const formatPlugin: SlatePlugin = {
       Transforms.setNodes(
         editor,
         { italic: data.italic },
-        { match: (n) => !editor.isInline(n) && !editor.isVoid(n), split: true }
+        { match: (n) => Text.isText(n), split: true }
+      );
+    }
+
+    if (data?.underline !== undefined) {
+      Transforms.setNodes(
+        editor,
+        { underline: data.underline },
+        { match: (n) => Text.isText(n), split: true }
+      );
+    }
+
+    if (data?.strikethrough !== undefined) {
+      Transforms.setNodes(
+        editor,
+        { strikethrough: data.strikethrough },
+        { match: (n) => Text.isText(n), split: true }
       );
     }
   },
   onKeyDown: (event, editor) => {
-    // 支持Markdown快捷键：**粗体**, *斜体*
+    // 阻止在代码块内触发格式化
+    const [match] = Editor.nodes(editor, {
+      match: (n) => Element.isElement(n) && n.type === "code-block"
+    });
+    
+    if (match) return false;
+
+    // 支持Markdown快捷键：**粗体*, *斜体*, ~~删除线~~
     if (
-      (event.key === "*" || event.key === "_") &&
+      (event.key === "*" || event.key === "_" || event.key === "~") &&
       event.target instanceof HTMLElement
     ) {
-      const text = event.target.textContent || "";
-      const charCount = (text.match(new RegExp(event.key, "g")) || []).length;
-
-      if (charCount === 1 && event.key === "*") {
-        // 斜体
-        Transforms.setNodes(
-          editor,
-          { italic: true },
-          {
-            match: (n) => !editor.isInline(n) && !editor.isVoid(n),
-            split: true,
+      const path = editor.selection?.anchor.path;
+      if (!path) return false;
+      
+      const text = Editor.string(editor, path);
+      
+      if (event.key === "*" || event.key === "_") {
+        // 处理粗体和斜体
+        if (event.shiftKey && (event.key === "*" || event.key === "_")) {
+          // **粗体**
+          const doubleAsteriskMatch = text.match(/(\*\*|__)(.*?)\1$/);
+          if (doubleAsteriskMatch) {
+            event.preventDefault();
+            Transforms.setNodes(
+              editor,
+              { bold: true },
+              { match: (n) => Text.isText(n), split: true }
+            );
+            return true;
           }
-        );
-        return true;
-      } else if (charCount === 1 && event.shiftKey && event.key === "*") {
-        // 粗体
-        Transforms.setNodes(
-          editor,
-          { bold: true },
-          {
-            match: (n) => !editor.isInline(n) && !editor.isVoid(n),
-            split: true,
+        } else {
+          // *斜体*
+          const singleAsteriskMatch = text.match(/(\*|_)(.*?)\1$/);
+          if (singleAsteriskMatch && !text.match(/(\*\*|__)/)) {
+            event.preventDefault();
+            Transforms.setNodes(
+              editor,
+              { italic: true },
+              { match: (n) => Text.isText(n), split: true }
+            );
+            return true;
           }
-        );
-        return true;
+        }
+      } else if (event.key === "~") {
+        // ~~删除线~~
+        const strikethroughMatch = text.match(/(~~)(.*?)\1$/);
+        if (strikethroughMatch) {
+          event.preventDefault();
+          Transforms.setNodes(
+            editor,
+            { strikethrough: true },
+            { match: (n) => Text.isText(n), split: true }
+          );
+          return true;
+        }
       }
     }
     return false;
