@@ -1,4 +1,4 @@
-import Editor from "@/components/Editor";
+import Editor from "@/core/Editor";
 import styles from "./style.module.less";
 
 const EditorPage = () => {

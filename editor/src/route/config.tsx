@@ -26,7 +26,13 @@ const routes: RouteConfig[] = [
     element: <Home />,
     auth: true,
     icon: null, // 这里可以放icon组件
-    children: [
+    children: [{
+        title: "富文本编辑器",
+        path: "/editor",
+        element: <EditorPage />,
+        auth: true,
+        icon: null,
+      },
       {
         title: "大文件上传",
         path: "/upload",
@@ -34,17 +40,10 @@ const routes: RouteConfig[] = [
         auth: true,
         icon: null,
       },
-      {
-        title: "富文本编辑器",
-        path: "/editor",
-        element: <EditorPage />,
-        auth: true,
-        icon: null,
-      },
     ],
   },
   {
-    title: "富文本编辑器",
+    title: "登录",
     path: "/login",
     element: <Login />,
     auth: false,

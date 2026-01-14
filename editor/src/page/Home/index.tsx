@@ -35,6 +35,7 @@ const Home = () => {
           onClick={handleMenuClick}
           className={styles.menu}
           selectedKeys={[location.pathname]}
+          defaultOpenKeys={["/"]}
         />
       </div>
       <div className={styles.contentBox}>
