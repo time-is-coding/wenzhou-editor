@@ -1,31 +1,25 @@
-import { createEditor, type Descendant } from "slate";
-import { Slate, Editable, withReact } from "slate-react";
+// core/index.tsx
+import { Slate, Editable } from 'slate-react'
+import { useMemo } from 'react'
+import { createEditor } from './createEditor'
+import { corePlugins } from './plugins'
+import { createRenderLeaf } from './render/renderLeaf'
+import { createRenderElement } from './render/renderElement'
+import type { CoreEditorProps } from './types'
 import styles from "./styles.module.less";
-import { useMemo } from "react";
-
-/**
- * 编辑器组件的初始值，提供Markdown示例
- */
-const initialValue: Descendant[] = [
-  {
-    type: 'paragraph',
-    children: [
-      { text: "" }
-    ],
-  }
-];
-
 /**
  * 主编辑器组件
  */
-const Editor = () => {
-  const editor = useMemo(() => withReact(createEditor()), [])
+const Editor = ({ initialValue }: CoreEditorProps) => {
+  const editor = useMemo(() => createEditor(corePlugins), [])
 
   return (
     <Slate editor={editor} initialValue={initialValue}>
       <Editable
-        className={styles.editor}
-        placeholder="支持markdown的富文本编辑器"
+        className={styles.editorContent}
+        renderLeaf={createRenderLeaf(corePlugins)}
+        renderElement={createRenderElement(corePlugins)}
+        placeholder='在文舟上书写你的思绪，随文字流动，记录每一次灵感。'
       />
     </Slate>
   );
