@@ -14,12 +14,20 @@ const Editor = ({ initialValue }: CoreEditorProps) => {
   const editor = useMemo(() => createEditor(corePlugins), [])
 
   return (
-    <Slate editor={editor} initialValue={initialValue}>
+    <Slate editor={editor} initialValue={initialValue} onChange={(editor) => { 
+      console.log(editor)
+    }}>
       <Editable
         className={styles.editorContent}
         renderLeaf={createRenderLeaf(corePlugins)}
         renderElement={createRenderElement(corePlugins)}
         placeholder='在文舟上书写你的思绪，随文字流动，记录每一次灵感。'
+         onKeyDown={(event) => {
+          for (const plugin of corePlugins) {
+            plugin.onKeyDown?.(event, editor)
+            if (event.defaultPrevented) break
+          }
+        }}
       />
     </Slate>
   );

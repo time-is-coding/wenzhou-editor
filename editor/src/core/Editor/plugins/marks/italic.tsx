@@ -1,8 +1,8 @@
 import type { SlatePlugin } from "../../types"
-
+export const ITALIC_KEY = "italic";
 // core/plugins/marks/italic.ts
 export const ItalicPlugin: SlatePlugin = {
-  key: 'italic',
+  key: ITALIC_KEY,
   renderLeaf: ({ leaf, attributes, children }) => {
     if (!leaf.italic) return null;
     return (

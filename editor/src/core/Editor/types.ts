@@ -7,6 +7,13 @@ export interface CoreEditorProps {
   initialValue: Descendant[];
 }
 
+export type HotkeyHandler = (editor: Editor) => void;
+
+export interface HotkeyConfig {
+  hotkey: string;
+  handler: HotkeyHandler;
+}
+
 export interface SlatePlugin {
   key: string;
 
@@ -21,4 +28,10 @@ export interface SlatePlugin {
 
   /** 键盘事件 */
   onKeyDown?: (event: React.KeyboardEvent, editor: Editor) => void;
+
+  /** 节点规范化 */
+  normalizeNode?: (entry: [any, any], editor: Editor) => void;
+
+  /** ⭐ 新增：插件注册的快捷键 */
+  hotkeys?: HotkeyConfig[];
 }

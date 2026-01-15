@@ -6,7 +6,7 @@ const initialValue = [
     type: "paragraph",
     children: [
       {
-        text: "",
+        text: "加粗",
       },
     ]
   }
