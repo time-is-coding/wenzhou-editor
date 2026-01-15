@@ -1,83 +1,31 @@
-import type { Descendant } from "slate";
-import { Slate, Editable } from "slate-react";
+import { createEditor, type Descendant } from "slate";
+import { Slate, Editable, withReact } from "slate-react";
 import styles from "./styles.module.less";
-import useEditor from "./hooks/useEditor";
-import { mockData } from "./config/mock";
-import { useCallback, useMemo } from "react";
+import { useMemo } from "react";
 
 /**
  * 编辑器组件的初始值，提供Markdown示例
  */
-const initialValue: Descendant[] = mockData;
+const initialValue: Descendant[] = [
+  {
+    type: 'paragraph',
+    children: [
+      { text: "" }
+    ],
+  }
+];
 
 /**
  * 主编辑器组件
  */
 const Editor = () => {
-  const { editor, pluginManager } = useEditor();
-
-  const plugins = useMemo(() => {
-    return pluginManager.getAll() || [];
-  }, [pluginManager]);
-
-  /**
-   * 合并所有插件的renderElement函数
-   */
-  const renderElement = useCallback(
-    (props: any) => {
-      for (const plugin of plugins) {
-        if (plugin.renderElement) {
-          const result = plugin.renderElement(props);
-          if (result) return result;
-        }
-      }
-      // 默认渲染段落
-      return <p {...props.attributes}>{props.children}</p>;
-    },
-    [plugins]
-  );
-
-  /**
-   * 合并所有插件的renderLeaf函数
-   */
-  const renderLeaf = useCallback(
-    (props: any) => {
-      for (const plugin of plugins) {
-        if (plugin.renderLeaf) {
-          const result = plugin.renderLeaf(props);
-          if (result) return result;
-        }
-      }
-      // 默认渲染
-      return <span {...props.attributes}>{props.children}</span>;
-    },
-    [plugins]
-  );
-
-  /**
-   * 合并所有插件的onKeyDown函数
-   */
-  const onKeyDown = useCallback(
-    (event: React.KeyboardEvent<HTMLDivElement>) => {
-      for (const plugin of plugins) {
-        if (plugin.onKeyDown && plugin.onKeyDown(event, editor)) {
-          event.preventDefault();
-          return true;
-        }
-      }
-      return false;
-    },
-    [plugins, editor]
-  );
+  const editor = useMemo(() => withReact(createEditor()), [])
 
   return (
     <Slate editor={editor} initialValue={initialValue}>
       <Editable
         className={styles.editor}
-        renderElement={renderElement}
-        renderLeaf={renderLeaf}
-        onKeyDown={onKeyDown}
-        placeholder="输入 / 选择格式以使用 Markdown 快捷方式..."
+        placeholder="支持markdown的富文本编辑器"
       />
     </Slate>
   );

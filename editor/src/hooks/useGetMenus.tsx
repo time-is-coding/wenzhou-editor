@@ -67,7 +67,6 @@ const transformToMenuItem = (routeConfig: RouteConfig) => {
     label,
     icon: routeConfig.icon,
     path: routeConfig.path,
-    auth: routeConfig.auth !== false, // 默认需要认证
   };
 
   // 处理子路由
