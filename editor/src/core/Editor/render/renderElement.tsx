@@ -4,13 +4,12 @@ import type { RenderElementProps } from 'slate-react'
 
 export const createRenderElement =
   (plugins: SlatePlugin[]) =>
-  (props: RenderElementProps) => {
-    for (const plugin of plugins) {
-      if (plugin.renderElement) {
-        const element = plugin.renderElement(props)
-        if (element) return element
+    (props: RenderElementProps) => {
+      for (const plugin of plugins) {
+        if (plugin.renderElement) {
+          const element = plugin.renderElement(props)
+          if (element) return element
+        }
       }
+      return <p {...props.attributes}>{props.children}</p>
     }
-
-    return <p {...props.attributes}>{props.children}</p>
-  }

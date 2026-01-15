@@ -25,6 +25,5 @@ export const basePlugins = [BoldPlugin, ItalicPlugin, CodePlugin];
 
 // 快捷键
 const hotkeyPlugin = HotkeyPlugin(basePlugins);
-
 // 这里的顺序非常重要
 export const corePlugins = [normalizePlugin, markdownPlugin, hotkeyPlugin, ...basePlugins];

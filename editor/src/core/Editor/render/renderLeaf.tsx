@@ -6,11 +6,11 @@ import type { RenderLeafProps } from 'slate-react'
 export const createRenderLeaf =
     (plugins: SlatePlugin[]) =>
         (props: RenderLeafProps): ReactElement => {
+            let el = props.children;
             for (const plugin of plugins) {
-                const render = plugin.renderLeaf
-                if (!render) continue
-                const element = render(props)
-                if (element) return element
+                if (plugin.renderLeaf) {
+                    el = plugin.renderLeaf({ ...props, children: el }) || el;
+                }
             }
-            return <span {...props.attributes}>{props.children}</span>
+            return <span {...props.attributes}>{el}</span>
         }
