@@ -5,9 +5,10 @@
 import { Editor, Range, Text, Transforms, Point } from "slate";
 import type { MarkdownRule } from "./types";
 import { isBlockElement } from "../../utils";
+import { BOLD_KEY } from "../marks/bold";
 
 export const markdownBoldRule: MarkdownRule = {
-  key: "bold", // 规则标识符，用于区分不同的 Markdown 规则
+  key: BOLD_KEY, // 规则标识符，用于区分不同的 Markdown 规则
 
   trigger: " ", // 触发该规则的关键字符，这里是空格键
 
@@ -86,7 +87,6 @@ export const markdownBoldRule: MarkdownRule = {
         },
       });
 
-
       // 2 计算加粗文本的新范围
       const startPoint = anchor;
       const endPoint: Point = { path: anchor.path, offset: start + text.length };
@@ -101,7 +101,7 @@ export const markdownBoldRule: MarkdownRule = {
       Transforms.select(editor, endPoint);
 
       // 5 移除当前 mark，避免后续输入继续加粗
-      Editor.removeMark(editor, "bold");
-    })
+      Editor.removeMark(editor, BOLD_KEY);
+    });
   },
 };

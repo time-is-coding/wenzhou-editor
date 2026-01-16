@@ -7,7 +7,6 @@ const initialValue = [
     children: [
       {
         text: "加粗",
-        italic: true
       },
     ]
   }
