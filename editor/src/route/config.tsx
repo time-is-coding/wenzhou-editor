@@ -33,13 +33,13 @@ const routes: RouteConfig[] = [
         auth: true,
         icon: null,
       },
-      {
-        title: "大文件上传",
-        path: "/upload",
-        element: <UploadPage />,
-        auth: true,
-        icon: null,
-      },
+      // {
+      //   title: "大文件上传",
+      //   path: "/upload",
+      //   element: <UploadPage />,
+      //   auth: true,
+      //   icon: null,
+      // },
     ],
   },
   {
