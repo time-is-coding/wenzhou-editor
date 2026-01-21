@@ -1,7 +1,7 @@
 // core/plugins/marks/bold.ts
-import { Editor } from "slate";
 import type { SlatePlugin } from "../../types";
-import { cancelMarkWhenInsertBreak, toggleMark } from "../../utils";
+import { cancelMarkWhenInsertBreak } from "../../utils";
+import { toggleMark } from "../../command";
 
 export const BOLD_KEY = "bold";
 const BOLD_HOTKEY = 'mod+b'

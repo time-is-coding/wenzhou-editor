@@ -1,9 +1,11 @@
-import { Editor } from "slate";
+
 import type { SlatePlugin } from "../../types"
-import { cancelMarkWhenInsertBreak, toggleMark } from "../../utils";
+import { cancelMarkWhenInsertBreak } from "../../utils";
+import { toggleMark } from "../../command";
+
 export const ITALIC_KEY = "italic";
 const ITALIC_HOTKEY = 'mod+i'
-// core/plugins/marks/italic.ts
+
 export const ItalicPlugin: SlatePlugin = {
   key: ITALIC_KEY,
   renderLeaf: ({ leaf, attributes, children }) => {

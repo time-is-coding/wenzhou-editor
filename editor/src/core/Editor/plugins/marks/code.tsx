@@ -1,8 +1,10 @@
 import type { SlatePlugin } from "../../types"
-import { cancelMarkWhenInsertBreak, toggleMark } from "../../utils";
+import { cancelMarkWhenInsertBreak } from "../../utils";
+import { toggleMark } from "../../command";
+
 export const CODE_KEY = "code";
 export const CODE_HOTKEY = "mod+k";
-// core/plugins/marks/code.ts
+
 export const CodePlugin: SlatePlugin = {
   key: CODE_KEY,
   renderLeaf: ({ leaf, attributes, children }) => {

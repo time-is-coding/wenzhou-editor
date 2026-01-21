@@ -1,6 +1,10 @@
 import type { SlatePlugin } from "../../types";
 import type { MarkdownRule } from "./types";
 
+export * from "./markdownItalicRule";
+export * from "./markdownBoldRule";
+export * from "./markdownCodeRule";
+
 interface CreateMarkdownPluginOptions {
   rules: MarkdownRule[];
 }

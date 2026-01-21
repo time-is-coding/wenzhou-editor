@@ -6,6 +6,7 @@ import { Editor, Range, Text, Transforms, Point } from "slate";
 import type { MarkdownRule } from "./types";
 import { isBlockElement } from "../../utils";
 import { ITALIC_KEY } from "../marks/italic";
+import { applyItalicFromMarkdown } from "../../command";
 
 export const markdownItalicRule: MarkdownRule = {
   key: ITALIC_KEY,
@@ -31,7 +32,6 @@ export const markdownItalicRule: MarkdownRule = {
     // 匹配被 _ 或 * 包裹的文本
     const match = text.match(/([*_])([^*_]+)\1$/);
     if (!match) return null;
-    debugger;
     const [textNode, textPath] = Editor.node(editor, cursor);
     if (!Text.isText(textNode)) return null;
     const startOffset = cursor.offset - match[0].length;
@@ -47,38 +47,6 @@ export const markdownItalicRule: MarkdownRule = {
   },
 
   apply(editor, match) {
-    const { range, text } = match;
-
-    Editor.withoutNormalizing(editor, () => {
-      const { anchor, focus } = range;
-      const start = anchor.offset;
-      const end = focus.offset;
-
-      Transforms.delete(editor, {
-        at: {
-          anchor: { path: range.anchor.path, offset: end - 1 },
-          focus: { path: range.anchor.path, offset: end },
-        },
-      });
-
-      Transforms.delete(editor, {
-        at: {
-          anchor: { path: range.anchor.path, offset: start },
-          focus: { path: range.anchor.path, offset: start + 1 },
-        },
-      });
-
-      const startPoint = anchor;
-      const endPoint: Point = { path: anchor.path, offset: start + text.length };
-      Transforms.setNodes(
-        editor,
-        { italic: true },
-        { at: { anchor: startPoint, focus: endPoint }, match: Text.isText, split: true }
-      );
-
-      Transforms.select(editor, endPoint);
-
-      Editor.removeMark(editor, ITALIC_KEY);
-    });
+    applyItalicFromMarkdown(editor, match);
   },
 };

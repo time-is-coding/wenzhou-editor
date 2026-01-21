@@ -2,10 +2,11 @@
  * 实现 Markdown 行内代码语法 `代码` 的处理规则
  * 当用户输入 `代码` 并按空格后，将其转换为富文本格式的行内代码效果
  */
-import { Editor, Range, Text, Transforms, Point } from "slate";
+import { Editor, Range, Text, Point } from "slate";
 import type { MarkdownRule } from "./types";
 import { isBlockElement } from "../../utils";
 import { CODE_KEY } from "../marks/code";
+import { applyInleCodeFromMarkdown } from "../../command";
 
 export const markdownInlineCodeRule: MarkdownRule = {
   key: CODE_KEY,
@@ -46,38 +47,6 @@ export const markdownInlineCodeRule: MarkdownRule = {
   },
 
   apply(editor, match) {
-    const { range, text } = match;
-
-    Editor.withoutNormalizing(editor, () => {
-      const { anchor, focus } = range;
-      const start = anchor.offset;
-      const end = focus.offset;
-
-      Transforms.delete(editor, {
-        at: {
-          anchor: { path: range.anchor.path, offset: end - 1 },
-          focus: { path: range.anchor.path, offset: end },
-        },
-      });
-
-      Transforms.delete(editor, {
-        at: {
-          anchor: { path: range.anchor.path, offset: start },
-          focus: { path: range.anchor.path, offset: start + 1 },
-        },
-      });
-
-      const startPoint = anchor;
-      const endPoint: Point = { path: anchor.path, offset: start + text.length };
-      Transforms.setNodes(
-        editor,
-        { code: true },
-        { at: { anchor: startPoint, focus: endPoint }, match: Text.isText, split: true }
-      );
-
-      Transforms.select(editor, endPoint);
-
-      Editor.removeMark(editor, CODE_KEY);
-    });
+    applyInleCodeFromMarkdown(editor, match);
   },
 };

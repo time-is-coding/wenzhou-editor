@@ -2,10 +2,11 @@
  * 实现 Markdown 加粗语法 **文本** 的处理规则
  * 当用户输入 **加粗文字** 并按空格后，将其转换为富文本格式的加粗效果
  */
-import { Editor, Range, Text, Transforms, Point } from "slate";
+import { Editor, Range, Text, Point } from "slate";
 import type { MarkdownRule } from "./types";
 import { isBlockElement } from "../../utils";
 import { BOLD_KEY } from "../marks/bold";
+import { applyBoldFromMarkdown } from "../../command";
 
 export const markdownBoldRule: MarkdownRule = {
   key: BOLD_KEY, // 规则标识符，用于区分不同的 Markdown 规则
@@ -63,45 +64,6 @@ export const markdownBoldRule: MarkdownRule = {
    * @param match 包含匹配文本和范围的对象
    */
   apply(editor, match) {
-    const { range, text } = match;
-
-    Editor.withoutNormalizing(editor, () => {
-      const { anchor, focus } = range;
-      // 1 删除开头和结尾的 ** 符号（保留中间文本及原有 mark）
-      const start = anchor.offset;
-      const end = focus.offset;
-
-      // 先删除结尾 **
-      Transforms.delete(editor, {
-        at: {
-          anchor: { path: range.anchor.path, offset: end - 2 },
-          focus: { path: range.anchor.path, offset: end },
-        },
-      });
-
-      // 再删除开头 **
-      Transforms.delete(editor, {
-        at: {
-          anchor: { path: range.anchor.path, offset: start },
-          focus: { path: range.anchor.path, offset: start + 2 },
-        },
-      });
-
-      // 2 计算加粗文本的新范围
-      const startPoint = anchor;
-      const endPoint: Point = { path: anchor.path, offset: start + text.length };
-      // 3 添加 bold mark，保留原有 mark
-      Transforms.setNodes(
-        editor,
-        { bold: true },
-        { at: { anchor: startPoint, focus: endPoint }, match: Text.isText, split: true }
-      );
-
-      // 4 将光标移动到加粗文本末尾
-      Transforms.select(editor, endPoint);
-
-      // 5 移除当前 mark，避免后续输入继续加粗
-      Editor.removeMark(editor, BOLD_KEY);
-    });
+    applyBoldFromMarkdown(editor, match);
   },
 };
