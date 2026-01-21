@@ -1,23 +1,14 @@
-/**
- * 实现 Markdown 加粗语法 **文本** 的处理规则
- * 当用户输入 **加粗文字** 并按空格后，将其转换为富文本格式的加粗效果
- */
 import { Editor, Range, Text, Point } from "slate";
 import type { LeafMarkdownRuleMatch, MarkdownRule } from "./types";
 import { isBlockElement } from "../../utils";
-import { BOLD_KEY } from "../marks/bold";
-import { applyBoldFromMarkdown } from "../../command";
+import { STRIKETHROUGH_KEY } from "../marks/strikethrough";
+import { applyStrikethroughFromMarkdown } from "../../command";
 
-export const markdownBoldRule: MarkdownRule<LeafMarkdownRuleMatch> = {
-  key: BOLD_KEY, // 规则标识符，用于区分不同的 Markdown 规则
+export const markdownStrikethroughRule: MarkdownRule<LeafMarkdownRuleMatch> = {
+  key: STRIKETHROUGH_KEY,
 
-  trigger: " ", // 触发该规则的关键字符，这里是空格键
+  trigger: " ",
 
-  /**
-   * 匹配函数，检测当前光标位置是否存在可转换的 Markdown 加粗语法
-   * @param editor Slate 编辑器实例
-   * @returns 如果找到匹配的加粗语法，返回包含文本和范围的对象；否则返回 null
-   */
   match(editor) {
     const { selection } = editor;
     // 检查是否有选区且选区是否为折叠状态（即光标而非选择区域）
@@ -38,11 +29,11 @@ export const markdownBoldRule: MarkdownRule<LeafMarkdownRuleMatch> = {
       focus: cursor,
     });
 
-    // 使用正则表达式匹配以 **文本** 结尾的模式
-    const match = text.match(/\*\*([^*]+)\*\*$/);
+    // 使用正则表达式匹配以 ~~文本~~ 结尾的模式
+    const match = text.match(/\~\~([^~]+)\~\~$/);
     if (!match) return null;
 
-    // 计算匹配到的加粗语法的起始位置
+    // 计算匹配到的删除线语法的起始位置
     const [textNode, textPath] = Editor.node(editor, cursor);
     if (!Text.isText(textNode)) return null;
     const startOffset = cursor.offset - match[0].length;
@@ -64,6 +55,6 @@ export const markdownBoldRule: MarkdownRule<LeafMarkdownRuleMatch> = {
    * @param match 包含匹配文本和范围的对象
    */
   apply(editor, match) {
-    applyBoldFromMarkdown(editor, match);
+    applyStrikethroughFromMarkdown(editor, match);
   },
 };

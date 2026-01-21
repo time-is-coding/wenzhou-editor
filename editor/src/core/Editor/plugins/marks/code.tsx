@@ -8,7 +8,7 @@ export const CODE_HOTKEY = "mod+k";
 export const CodePlugin: SlatePlugin = {
   key: CODE_KEY,
   renderLeaf: ({ leaf, attributes, children }) => {
-    if (leaf.code) {
+    if (leaf[CODE_KEY]) {
       children = <code>{children}</code>
     }
     return children;

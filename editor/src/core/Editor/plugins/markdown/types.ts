@@ -1,11 +1,11 @@
 import { Editor, Range } from "slate";
 
-export interface MarkdownRuleMatch {
+export interface LeafMarkdownRuleMatch {
   range: Range;
   text: string;
 }
 
-export interface MarkdownRule {
+export interface MarkdownRule<T = any> {
   /** 唯一标识 */
   key: string;
 
@@ -13,8 +13,8 @@ export interface MarkdownRule {
   trigger: string | string[];
 
   /** 是否命中 markdown */
-  match: (editor: Editor) => MarkdownRuleMatch | null;
+  match: (editor: Editor) => T | null;
 
   /** 命中后如何转换 */
-  apply: (editor: Editor, match: MarkdownRuleMatch) => void;
+  apply: (editor: Editor, match: T) => void;
 }

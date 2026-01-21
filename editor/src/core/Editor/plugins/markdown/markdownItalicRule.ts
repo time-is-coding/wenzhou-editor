@@ -2,13 +2,13 @@
  * 实现 Markdown 加粗语法 **文本** 的处理规则
  * 当用户输入 **加粗文字** 并按空格后，将其转换为富文本格式的加粗效果
  */
-import { Editor, Range, Text, Transforms, Point } from "slate";
-import type { MarkdownRule } from "./types";
+import { Editor, Range, Text, Point } from "slate";
+import type { LeafMarkdownRuleMatch, MarkdownRule } from "./types";
 import { isBlockElement } from "../../utils";
 import { ITALIC_KEY } from "../marks/italic";
 import { applyItalicFromMarkdown } from "../../command";
 
-export const markdownItalicRule: MarkdownRule = {
+export const markdownItalicRule: MarkdownRule<LeafMarkdownRuleMatch> = {
   key: ITALIC_KEY,
 
   trigger: " ",

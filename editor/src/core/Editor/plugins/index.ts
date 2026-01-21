@@ -1,20 +1,28 @@
 // core/plugins/index.ts
 import { BoldPlugin, StrikethroughPlugin, ItalicPlugin, CodePlugin } from "./marks";
 import { BOLD_KEY, ITALIC_KEY, CODE_KEY, STRIKETHROUGH_KEY } from "./marks";
-import { HotkeyPlugin } from "./hotkey/hotkey";
+import { createHotkeyPlugin } from "./hotkey/hotkey";
 import { createNormalizePlugin } from "./normailze";
-import { removeFalseMark } from "./normailze/removeFalseMark";
-import { ensureAtLeastOneParagraph } from "./normailze/ensureAtLeastOneParagraph";
-import { markdownBoldRule, markdownInlineCodeRule, markdownItalicRule, createMarkdownPlugin } from "./markdown";
+import { removeFalseMark, ensureAtLeastOneParagraph, normalizeHeading } from "./normailze";
+import {
+  markdownBoldRule,
+  markdownInlineCodeRule,
+  markdownItalicRule,
+  markdownStrikethroughRule,
+  markdownHeadingRule,
+  createMarkdownPlugin,
+} from "./markdown";
+import { HeadingPlugin } from "./block";
 
 // markdownPlugin
 const markdownPlugin = createMarkdownPlugin({
-  rules: [markdownBoldRule, markdownItalicRule, markdownInlineCodeRule],
+  rules: [markdownBoldRule, markdownItalicRule, markdownInlineCodeRule, markdownStrikethroughRule, markdownHeadingRule],
 });
 
 // 结构化数据
 const normalizePlugin = createNormalizePlugin({
   rules: [
+    normalizeHeading,
     ensureAtLeastOneParagraph,
     removeFalseMark(BOLD_KEY),
     removeFalseMark(ITALIC_KEY),
@@ -23,10 +31,12 @@ const normalizePlugin = createNormalizePlugin({
   ],
 });
 
-// 基础插件
+// leaf插件
 export const markPlugins = [BoldPlugin, ItalicPlugin, CodePlugin, StrikethroughPlugin];
+// block插件
+export const blockPlugins = [HeadingPlugin];
 
 // 快捷键
-const hotkeyPlugin = HotkeyPlugin(markPlugins);
+const hotkeyPlugin = createHotkeyPlugin([...markPlugins, ...blockPlugins]);
 // 这里的顺序非常重要
-export const corePlugins = [normalizePlugin, markdownPlugin, hotkeyPlugin, ...markPlugins];
+export const corePlugins = [normalizePlugin, markdownPlugin, hotkeyPlugin, ...blockPlugins, ...markPlugins];

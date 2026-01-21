@@ -3,12 +3,12 @@
  * 当用户输入 `代码` 并按空格后，将其转换为富文本格式的行内代码效果
  */
 import { Editor, Range, Text, Point } from "slate";
-import type { MarkdownRule } from "./types";
+import type { LeafMarkdownRuleMatch, MarkdownRule } from "./types";
 import { isBlockElement } from "../../utils";
 import { CODE_KEY } from "../marks/code";
 import { applyInleCodeFromMarkdown } from "../../command";
 
-export const markdownInlineCodeRule: MarkdownRule = {
+export const markdownInlineCodeRule: MarkdownRule<LeafMarkdownRuleMatch> = {
   key: CODE_KEY,
 
   trigger: " ",

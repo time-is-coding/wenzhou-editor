@@ -1,11 +1,11 @@
 import { Editor, Text, Transforms, Point, Range } from "slate";
-import { BOLD_KEY } from "../../plugins/marks/bold";
+import { STRIKETHROUGH_KEY } from "../../plugins/marks/strikethrough";
 
-export interface ApplyBoldFromMarkdownOptions {
+export interface ApplyStrikethroughFromMarkdownOptions {
   range: Range;
   text: string;
 }
-export function applyBoldFromMarkdown(editor: Editor, options: ApplyBoldFromMarkdownOptions) {
+export function applyStrikethroughFromMarkdown(editor: Editor, options: ApplyStrikethroughFromMarkdownOptions) {
   const { range, text } = options;
   const { anchor, focus } = range;
 
@@ -13,7 +13,7 @@ export function applyBoldFromMarkdown(editor: Editor, options: ApplyBoldFromMark
     const start = anchor.offset;
     const end = focus.offset;
 
-    // 1. 删除结尾 **
+    // 1. 删除结尾 ~~
     Transforms.delete(editor, {
       at: {
         anchor: { path: anchor.path, offset: end - 2 },
@@ -21,7 +21,7 @@ export function applyBoldFromMarkdown(editor: Editor, options: ApplyBoldFromMark
       },
     });
 
-    // 2. 删除开头 **
+    // 2. 删除开头 ~~
     Transforms.delete(editor, {
       at: {
         anchor: { path: anchor.path, offset: start },
@@ -38,7 +38,7 @@ export function applyBoldFromMarkdown(editor: Editor, options: ApplyBoldFromMark
 
     Transforms.setNodes(
       editor,
-      { bold: true },
+      { strikethrough: true },
       {
         at: { anchor: startPoint, focus: endPoint },
         match: Text.isText,
@@ -50,6 +50,6 @@ export function applyBoldFromMarkdown(editor: Editor, options: ApplyBoldFromMark
     Transforms.select(editor, endPoint);
 
     // 5. 关闭 bold mark
-    Editor.removeMark(editor, BOLD_KEY);
+    Editor.removeMark(editor, STRIKETHROUGH_KEY);
   });
 }

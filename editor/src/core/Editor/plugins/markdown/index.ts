@@ -4,6 +4,8 @@ import type { MarkdownRule } from "./types";
 export * from "./markdownItalicRule";
 export * from "./markdownBoldRule";
 export * from "./markdownCodeRule";
+export * from "./markdownStrikethroughRule";
+export * from "./markdownHeadingRule";
 
 interface CreateMarkdownPluginOptions {
   rules: MarkdownRule[];

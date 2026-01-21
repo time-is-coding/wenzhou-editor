@@ -3,13 +3,13 @@ import { cancelMarkWhenInsertBreak } from "../../utils";
 import { toggleMark } from "../../command";
 
 export const STRIKETHROUGH_KEY = "strikethrough";
-const STRIKETHROUGH_HOTKEY = "mod+u";
+const STRIKETHROUGH_HOTKEY = "mod+shift+x";
 
 export const StrikethroughPlugin: SlatePlugin = {
   key: STRIKETHROUGH_KEY,
   renderLeaf: ({ leaf, attributes, children }) => {
-    if (leaf.italic) {
-      children = <u>{children}</u>;
+    if (leaf[STRIKETHROUGH_KEY]) {
+      children = <s>{children}</s>;
     }
     return children;
   },

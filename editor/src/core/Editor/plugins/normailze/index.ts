@@ -1,6 +1,10 @@
 import type { SlatePlugin } from "../../types";
 import type { NormalizeRule } from "./types";
 
+export * from "./ensureAtLeastOneParagraph";
+export * from "./normalizeHeading";
+export * from "./removeFalseMark";
+
 interface CreateNormalizePluginOptions {
   rules: NormalizeRule[];
 }

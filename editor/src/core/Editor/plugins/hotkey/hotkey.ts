@@ -3,7 +3,7 @@ import type { SlatePlugin } from "../../types";
 import { isHotkey } from "is-hotkey";
 import type { HotkeyConfig } from "../../types";
 
-export const HotkeyPlugin = (plugins: SlatePlugin[]): SlatePlugin => {
+export const createHotkeyPlugin = (plugins: SlatePlugin[]): SlatePlugin => {
   // 收集所有插件的 hotkeys
   const hotkeyMap: HotkeyConfig[] = [];
 

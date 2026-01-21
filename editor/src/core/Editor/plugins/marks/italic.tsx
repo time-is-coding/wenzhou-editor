@@ -9,7 +9,7 @@ const ITALIC_HOTKEY = 'mod+i'
 export const ItalicPlugin: SlatePlugin = {
   key: ITALIC_KEY,
   renderLeaf: ({ leaf, attributes, children }) => {
-    if (leaf.italic) {
+    if (leaf[ITALIC_KEY]) {
       children = <em>{children}</em>;
     }
     return children;
