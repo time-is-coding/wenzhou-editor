@@ -24,7 +24,7 @@ export interface SlatePlugin {
   renderLeaf?: (props: RenderLeafProps) => ReactElement | null;
 
   /** 渲染 element（块级） */
-  renderElement?: (props: RenderElementProps) => ReactElement | null;
+  renderElement?: (props: RenderElementProps) => { element: ReactElement; isHandled?: boolean };
 
   /** 键盘事件 */
   onKeyDown?: (event: React.KeyboardEvent, editor: Editor) => void;

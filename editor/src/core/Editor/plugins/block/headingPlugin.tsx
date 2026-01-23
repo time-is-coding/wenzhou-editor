@@ -36,9 +36,13 @@ export const HeadingPlugin: SlatePlugin = {
         if (element.type === HEADING_KEY) {
             const level = element.level || 1;
             const Tag = `h${level}`
-            return <Tag {...attributes}>{children}</Tag>;
+            children = <Tag {...attributes}>{children}</Tag>;
+            return {
+                element: children,
+                isHandled: true
+            }
         }
-        return children;
+        return {element:children};
     },
 
 

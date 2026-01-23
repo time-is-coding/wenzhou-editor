@@ -7,8 +7,8 @@ export const createRenderElement =
     (props: RenderElementProps) => {
       for (const plugin of plugins) {
         if (plugin.renderElement) {
-          const element = plugin.renderElement(props)
-          if (element) return element
+          const {isHandled, element} = plugin.renderElement(props)
+          if (isHandled) return element
         }
       }
       return <p {...props.attributes}>{props.children}</p>

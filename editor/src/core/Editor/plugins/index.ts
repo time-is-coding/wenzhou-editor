@@ -12,7 +12,7 @@ import {
   markdownHeadingRule,
   createMarkdownPlugin,
 } from "./markdown";
-import { HeadingPlugin } from "./block";
+import { HeadingPlugin, ParagraphPlugin } from "./block";
 
 // markdownPlugin
 const markdownPlugin = createMarkdownPlugin({
@@ -34,7 +34,8 @@ const normalizePlugin = createNormalizePlugin({
 // leaf插件
 export const markPlugins = [BoldPlugin, ItalicPlugin, CodePlugin, StrikethroughPlugin];
 // block插件
-export const blockPlugins = [HeadingPlugin];
+export const blockPlugins = [HeadingPlugin, ParagraphPlugin];
+// export const blockPlugins = [];
 
 // 快捷键
 const hotkeyPlugin = createHotkeyPlugin([...markPlugins, ...blockPlugins]);
