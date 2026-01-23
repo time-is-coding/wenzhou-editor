@@ -6,7 +6,7 @@ export const normalizeHeading: NormalizeRule = (entry, editor) => {
   if (Element.isElement(node) && node.type === "heading") {
     if (typeof node.level !== "number" || node.level < 1 || node.level > 6) {
       Transforms.setNodes(editor, { type: "paragraph" }, { at: path });
+      return true;
     }
   }
-  return true;
 };
