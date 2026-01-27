@@ -5,6 +5,7 @@ import type { ReactEditor } from "slate-react";
 import { toggleHeading } from "../../command";
 import type { HeadingLevel } from "../../schema";
 import type { SlatePlugin } from "../../types";
+import { cancelHeadingWhenInsertBreak } from "../../utils";
 
 export const HEADING_KEY = "heading";
 const hotkeyArr = [1, 2, 3, 4, 5, 6].map((i) => `mod+alt+${i}`);
@@ -18,18 +19,7 @@ const headingHotkey = hotkeyArr.map((hotkey, index) => ({
 export const HeadingPlugin: SlatePlugin = {
     key: HEADING_KEY,
     // 快捷键（事件层）
-    // hotkeys: [
-    //     ...headingHotkey, {
-    //         hotkey: 'enter',
-    //         handler: (editor) => { 
-    //             insertBreakAtSelection(editor);
-    //         }
-    //     }
-    // ],
     hotkeys: headingHotkey,
-
-    // 事件层
-
 
     // 视图层
     renderElement: ({ element, attributes, children }) => {
@@ -45,5 +35,9 @@ export const HeadingPlugin: SlatePlugin = {
         return {element:children};
     },
 
-
+    // withEditor（行为层）
+    withEditor: (editor) => {
+        cancelHeadingWhenInsertBreak(editor)
+        return editor
+    },
 };
