@@ -13,6 +13,7 @@ import {
   createMarkdownPlugin,
 } from "./markdown";
 import { HeadingPlugin, ParagraphPlugin } from "./block";
+import { UndoRedoPlugin } from "./hotkey/undoRedo";
 
 // markdownPlugin
 const markdownPlugin = createMarkdownPlugin({
@@ -38,6 +39,6 @@ export const blockPlugins = [HeadingPlugin, ParagraphPlugin];
 // export const blockPlugins = [];
 
 // 快捷键
-const hotkeyPlugin = createHotkeyPlugin([...markPlugins, ...blockPlugins]);
+const hotkeyPlugin = createHotkeyPlugin([...markPlugins, ...blockPlugins, UndoRedoPlugin]);
 // 这里的顺序非常重要
 export const corePlugins = [normalizePlugin, markdownPlugin, hotkeyPlugin, ...blockPlugins, ...markPlugins];

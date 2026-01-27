@@ -2,9 +2,10 @@
 import { createEditor as createSlateEditor } from "slate";
 import { withReact } from "slate-react";
 import type { SlatePlugin } from "./types";
+import { withEditorHistory } from "./history/withHistory";
 
 export const createEditor = (plugins: SlatePlugin[]) => {
-  let editor = withReact(createSlateEditor());
+  let editor = withEditorHistory(withReact(createSlateEditor()));
 
   // withEditor 是一个“编辑器能力增强函数”
   // Slate 的 editor 本质是一个「可变对象 + 方法集合」
