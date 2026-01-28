@@ -1,6 +1,7 @@
 import type { SlatePlugin } from "../../types"
 import { cancelMarkWhenInsertBreak } from "../../utils";
-import { toggleMark } from "../../command";
+import { createToggleMarkCommand } from "../../command";
+import { executeCommand } from "../../command";
 
 export const CODE_KEY = "code";
 export const CODE_HOTKEY = "mod+k";
@@ -17,7 +18,7 @@ export const CodePlugin: SlatePlugin = {
   hotkeys: [
     {
       hotkey: CODE_HOTKEY,
-      handler: (editor) => toggleMark(editor, CODE_KEY),
+      handler: (editor) => executeCommand(editor, createToggleMarkCommand(CODE_KEY)),
     },
   ],
 

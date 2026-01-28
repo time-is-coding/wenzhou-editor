@@ -1,6 +1,7 @@
 import type { SlatePlugin } from "../../types";
 import { cancelMarkWhenInsertBreak } from "../../utils";
-import { toggleMark } from "../../command";
+import { createToggleMarkCommand } from "../../command";
+import { executeCommand } from "../../command";
 
 export const STRIKETHROUGH_KEY = "strikethrough";
 const STRIKETHROUGH_HOTKEY = "mod+shift+x";
@@ -17,7 +18,7 @@ export const StrikethroughPlugin: SlatePlugin = {
   hotkeys: [
     {
       hotkey: STRIKETHROUGH_HOTKEY,
-      handler: (editor) => toggleMark(editor, STRIKETHROUGH_KEY),
+      handler: (editor) => executeCommand(editor, createToggleMarkCommand(STRIKETHROUGH_KEY)),
     },
   ],
 

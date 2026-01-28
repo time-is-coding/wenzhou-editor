@@ -1,6 +1,6 @@
-import { executeCommand } from "../../command/execute";
-import { redoCommand } from "../../command/redo";
-import { undoCommand } from "../../command/undo";
+import { executeCommand } from "../../command";
+import { redoCommand } from "../../command";
+import { undoCommand } from "../../command";
 import type { SlatePlugin } from "../../types";
 
 // core/plugins/hotkey/undoRedo.ts

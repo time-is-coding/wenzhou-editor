@@ -19,9 +19,10 @@
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-router-dom": "^7.8.2",
-    "slate": "^0.118.1",
+    "slate": "^0.123.0",
+    "slate-dom": "^0.123.0",
     "slate-history": "^0.113.1",
-    "slate-react": "^0.117.4"
+    "slate-react": "^0.123.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.33.0",

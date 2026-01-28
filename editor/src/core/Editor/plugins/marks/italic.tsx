@@ -1,7 +1,8 @@
 
 import type { SlatePlugin } from "../../types"
 import { cancelMarkWhenInsertBreak } from "../../utils";
-import { toggleMark } from "../../command";
+import { createToggleMarkCommand } from "../../command";
+import { executeCommand } from "../../command";
 
 export const ITALIC_KEY = "italic";
 const ITALIC_HOTKEY = 'mod+i'
@@ -18,7 +19,7 @@ export const ItalicPlugin: SlatePlugin = {
   hotkeys: [
     {
       hotkey: ITALIC_HOTKEY,
-      handler: (editor) => toggleMark(editor, ITALIC_KEY),
+      handler: (editor) => executeCommand(editor, createToggleMarkCommand(ITALIC_KEY)),
     },
   ],
 

@@ -1,6 +1,6 @@
 // core/command/undo.ts
 import type { Editor } from "slate";
-import type { EditorCommand } from "./types";
+import type { EditorCommand } from "../types";
 
 export const undoCommand: EditorCommand = {
   key: "undo",

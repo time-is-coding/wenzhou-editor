@@ -1,4 +1,5 @@
 import { Editor, Transforms, Element } from "slate";
+import type { EditorCommand } from "../types";
 import type { HeadingLevel } from "../../schema";
 
 export function toggleHeading(editor: Editor, level: HeadingLevel) {
@@ -18,3 +19,11 @@ export function isHeadingActive(editor: Editor, level: number): boolean {
 
   return !!match;
 }
+
+// 创建 EditorCommand
+export const createToggleHeadingCommand = (level: HeadingLevel): EditorCommand => ({
+  key: `toggle-heading-${level}`,
+  execute(editor: Editor) {
+    toggleHeading(editor, level);
+  },
+});

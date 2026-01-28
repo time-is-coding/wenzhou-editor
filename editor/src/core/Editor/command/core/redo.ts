@@ -1,5 +1,5 @@
 // core/command/redo.ts
-import type { EditorCommand } from "./types";
+import type { EditorCommand } from "../types";
 
 export const redoCommand: EditorCommand = {
   key: "redo",

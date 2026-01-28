@@ -1,4 +1,5 @@
 import { Editor } from "slate";
+import type { EditorCommand } from "../types";
 
 // 1. 工具函数
 export const toggleMark = (editor: Editor, markKey: string) => {
@@ -12,3 +13,11 @@ export const toggleMark = (editor: Editor, markKey: string) => {
     }
   });
 };
+
+// 2. 创建 EditorCommand
+export const createToggleMarkCommand = (markKey: string): EditorCommand => ({
+  key: `toggle-mark-${markKey}`,
+  execute(editor: Editor) {
+    toggleMark(editor, markKey);
+  },
+});

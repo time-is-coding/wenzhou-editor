@@ -2,7 +2,8 @@
 import type { BaseEditor } from "slate";
 import type { HistoryEditor } from "slate-history";
 import type { ReactEditor } from "slate-react";
-import { toggleHeading } from "../../command";
+import { createToggleHeadingCommand } from "../../command";
+import { executeCommand } from "../../command/common";
 import type { HeadingLevel } from "../../schema";
 import type { SlatePlugin } from "../../types";
 import { cancelHeadingWhenInsertBreak } from "../../utils";
@@ -12,7 +13,7 @@ const hotkeyArr = [1, 2, 3, 4, 5, 6].map((i) => `mod+alt+${i}`);
 const headingHotkey = hotkeyArr.map((hotkey, index) => ({
     hotkey,
     handler: (editor: BaseEditor & ReactEditor & HistoryEditor) => {
-        toggleHeading(editor, index + 1 as HeadingLevel);
+        executeCommand(editor, createToggleHeadingCommand(index + 1 as HeadingLevel));
     },
 }))
 
