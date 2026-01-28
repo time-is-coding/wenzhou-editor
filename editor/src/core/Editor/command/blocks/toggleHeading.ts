@@ -6,15 +6,21 @@ export function toggleHeading(editor: Editor, level: HeadingLevel) {
   const isActive = isHeadingActive(editor, level);
 
   Editor.withoutNormalizing(editor, () => {
-    Transforms.setNodes(editor, isActive ? { type: "paragraph" } : { type: "heading", level }, {
-      match: (n) => Element.isElement(n) && Editor.isBlock(editor, n),
-    });
+    if (isActive) {
+      Transforms.setNodes(editor, { type: "paragraph" } as any, {
+        match: (n) => Element.isElement(n) && Editor.isBlock(editor, n),
+      });
+    } else {
+      Transforms.setNodes(editor, { type: "heading", level } as any, {
+        match: (n) => Element.isElement(n) && Editor.isBlock(editor, n),
+      });
+    }
   });
 }
 
 export function isHeadingActive(editor: Editor, level: number): boolean {
   const [match] = Editor.nodes(editor, {
-    match: (n) => Element.isElement(n) && n.type === "heading" && n.level === level,
+    match: (n) => Element.isElement(n) && n.type === "heading" && (n as any).level === level,
   });
 
   return !!match;

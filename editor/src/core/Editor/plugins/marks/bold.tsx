@@ -11,9 +11,9 @@ export const BoldPlugin: SlatePlugin = {
   key: BOLD_KEY,
 
   // 视图层
-  renderLeaf: ({ leaf, attributes, children }) => {
+  renderLeaf: ({ leaf,attributes, children }) => {
     if (leaf[BOLD_KEY]) {
-      children = <strong>{children}</strong>;
+      children = <strong {...attributes}>{children}</strong>;
     }
     return children;
   },

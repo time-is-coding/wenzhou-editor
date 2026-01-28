@@ -10,7 +10,7 @@ export const StrikethroughPlugin: SlatePlugin = {
   key: STRIKETHROUGH_KEY,
   renderLeaf: ({ leaf, attributes, children }) => {
     if (leaf[STRIKETHROUGH_KEY]) {
-      children = <s>{children}</s>;
+      children = <s {...attributes}>{children}</s>;
     }
     return children;
   },

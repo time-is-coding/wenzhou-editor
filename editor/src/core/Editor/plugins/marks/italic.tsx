@@ -11,7 +11,7 @@ export const ItalicPlugin: SlatePlugin = {
   key: ITALIC_KEY,
   renderLeaf: ({ leaf, attributes, children }) => {
     if (leaf[ITALIC_KEY]) {
-      children = <em>{children}</em>;
+      children = <em {...attributes}>{children}</em>;
     }
     return children;
   },

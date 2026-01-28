@@ -1,10 +1,20 @@
 // core/history/withHistory.ts
-import { withHistory } from "slate-history";
-import type { Editor } from "slate";
+import type { Editor, Operation } from "slate";
 import { HistoryManager } from "./HistoryManager";
 
 export function withEditorHistory(editor: Editor) {
-  const e = withHistory(editor);
-  (e as any).historyManager = new HistoryManager();
-  return e;
+  const historyManager = new HistoryManager();
+  (editor as any).historyManager = historyManager;
+
+  // 拦截编辑器的所有操作，记录到历史
+  const { apply } = editor;
+
+  editor.apply = (operation: Operation) => {
+    // 先调用原始的 apply
+    apply(operation);
+    // 然后记录操作
+    historyManager.recordOperation(operation);
+  };
+
+  return editor;
 }

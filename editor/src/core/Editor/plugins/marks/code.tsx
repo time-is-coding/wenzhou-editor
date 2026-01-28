@@ -10,7 +10,7 @@ export const CodePlugin: SlatePlugin = {
   key: CODE_KEY,
   renderLeaf: ({ leaf, attributes, children }) => {
     if (leaf[CODE_KEY]) {
-      children = <code>{children}</code>
+      children = <code {...attributes}>{children}</code>
     }
     return children;
   },

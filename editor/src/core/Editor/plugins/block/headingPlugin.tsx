@@ -1,6 +1,5 @@
 // core/plugins/marks/bold.ts
 import type { BaseEditor } from "slate";
-import type { HistoryEditor } from "slate-history";
 import type { ReactEditor } from "slate-react";
 import { createToggleHeadingCommand } from "../../command";
 import { executeCommand } from "../../command/common";
@@ -12,7 +11,7 @@ export const HEADING_KEY = "heading";
 const hotkeyArr = [1, 2, 3, 4, 5, 6].map((i) => `mod+alt+${i}`);
 const headingHotkey = hotkeyArr.map((hotkey, index) => ({
     hotkey,
-    handler: (editor: BaseEditor & ReactEditor & HistoryEditor) => {
+    handler: (editor: BaseEditor & ReactEditor) => {
         executeCommand(editor, createToggleHeadingCommand(index + 1 as HeadingLevel));
     },
 }))
